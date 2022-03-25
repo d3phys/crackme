@@ -1,0 +1,6 @@
+[submodule "dependencies/raygui"]
+	path = dependencies/raygui
+	url = https://github.com/raysan5/raygui.git
+[submodule "patcher/dependencies/raygui"]
+	path = patcher/dependencies/raygui
+	url = https://github.com/raysan5/raygui.git
