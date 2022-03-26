@@ -2,10 +2,10 @@
 #define PATCH_H
 
 enum patch_info {
-        INFO_UNPATCHED = 0,
-        INFO_FAIL      = 1,
-        INFO_UNSUPPORT = 2,
-        INFO_PATCHED   = 3,
+        INFO_UNPATCHED   = 0,
+        INFO_FAILED      = 1,
+        INFO_UNSUPPORTED = 2,
+        INFO_PATCHED     = 3,
 };
 
 int patch(const char *file);

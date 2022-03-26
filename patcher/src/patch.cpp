@@ -9,6 +9,7 @@
 #include <string.h>
 #include <assert.h>
 #include <stddef.h>
+#include <errno.h>
 
 #include "patch.h"
 
@@ -29,13 +30,15 @@ static char* patch_mmap(const char *file, off_t *const len)
         *len = get_size(file);
         char *buf = (char *)mmap(nullptr, *len, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
         if (buf == MAP_FAILED) {
-                perror("Can't map file");
+                perror("can't mmap file");
                 return nullptr;
         }
         
+        int saved_errno = errno;
         if (fd > 0)
                 close(fd);
                 
+        errno = saved_errno;
         return buf;
 }
 
@@ -77,14 +80,14 @@ int get_patch_info(const char *file)
         char *binary = patch_mmap(file, &len);
         if (!binary) {
                 munmap(binary, len); 
-                return INFO_FAIL;
+                return INFO_FAILED;
         }
 
         /* ELF magic number 0x7F 'E' 'L' 'F' */
         unsigned elf_magic = 0x464c457f;
         if (*(unsigned *)binary != elf_magic) {
                 munmap(binary, len); 
-                return INFO_UNSUPPORT;
+                return INFO_UNSUPPORTED;
         }
 
         /* mov rsi, rax */
